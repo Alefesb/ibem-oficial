@@ -164,11 +164,27 @@ function Home() {
     setPlaying(next);
     const iframe = audioIframeRef.current;
     if (!iframe) return;
-    const cmd = next ? "playVideo" : "pauseVideo";
-    iframe.contentWindow?.postMessage(
-      JSON.stringify({ event: "command", func: cmd, args: [] }),
-      "*",
-    );
+    
+    if (next) {
+      iframe.contentWindow?.postMessage(
+        JSON.stringify({ event: "command", func: "playVideo", args: [] }),
+        "*",
+      );
+      // Set volume to 5% after a delay to ensure video is loaded
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          iframe.contentWindow?.postMessage(
+            JSON.stringify({ event: "command", func: "setVolume", args: [5] }),
+            "*",
+          );
+        }, 300 + i * 200);
+      }
+    } else {
+      iframe.contentWindow?.postMessage(
+        JSON.stringify({ event: "command", func: "pauseVideo", args: [] }),
+        "*",
+      );
+    }
   }
 
   async function fetchBible(e: React.FormEvent) {
@@ -247,7 +263,9 @@ function Home() {
       <header className="site-header" id="topo">
         <nav className="navbar" aria-label="Menu principal">
           <a className="brand" href="#inicio" aria-label="IBEM - Início">
-            <span className="brand-mark">IBEM</span>
+            <span className="brand-mark">
+              <img src="/favicon.ico" alt="IBEM logo" />
+            </span>
             <span className="brand-text">
               <strong>Igreja Batista</strong>
               <small>Evangelho e Missões</small>

@@ -3,6 +3,8 @@
   --blue-2: #1B4E86;
   --gold: #F6C445;
   --white: #FFFFFF;
+  --black: #000000;
+  --black-light: #111111;
   --gray: #F5F5F5;
   --text: #253044;
   --muted: #667085;
@@ -23,10 +25,14 @@ html {
 
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", "Georgia", serif;
   color: var(--text);
   background: var(--white);
   line-height: 1.6;
+}
+
+h1, h2, h3, h4, .brand-text strong, .section-kicker, .nav-links a, .btn, .event-date, .pastor-role {
+  font-family: "Montserrat", "Segoe UI", "Trebuchet MS", "Arial", sans-serif;
 }
 
 img {
@@ -81,12 +87,19 @@ a {
   width: 54px;
   height: 54px;
   border-radius: var(--radius);
-  color: var(--white);
-  background: linear-gradient(135deg, var(--blue), var(--blue-2));
-  border: 2px solid var(--gold);
+  background: transparent;
+  border: none;
   font-weight: 800;
   letter-spacing: 0;
-  box-shadow: 0 10px 20px rgba(11, 31, 58, 0.15);
+  overflow: hidden;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 50%;
 }
 
 .brand-text {
@@ -775,6 +788,7 @@ tbody tr:hover {
 
 .events-section{background:linear-gradient(180deg,#123A63,#0E2F52)}
 .events-section h2,.events-section .section-kicker{color:#fff}
+.events-section .event-card h3{color:#fff}
 .events-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;margin-top:2rem}
 .event-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:1.4rem;color:#fff;backdrop-filter:blur(10px);transition:transform .35s ease,border-color .35s ease}
 .event-card:hover{transform:translateY(-4px);border-color:#F6C445}
@@ -860,7 +874,7 @@ tbody tr:hover {
 .gallery-item:hover img{transform:scale(1.12)}
 
 /* Brand mark: 3D coin flip on hover */
-.brand-mark{display:inline-block;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1);background:var(--brand-gold);color:var(--brand-blue)}
+.brand-mark{display:inline-block;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1);background:transparent;color:var(--brand-blue)}
 .brand:hover .brand-mark{transform:rotateY(360deg) scale(1.08)}
 
 /* Hero title: gentle floating rise */
@@ -900,7 +914,7 @@ tbody tr:hover {
 /* Nav links: 3D underline slide */
 .nav-links a{position:relative;transform-style:preserve-3d;transition:transform .3s,color .25s}
 .nav-links a::before{content:"";position:absolute;left:0;right:0;bottom:-6px;height:3px;background:var(--brand-gold);border-radius:3px;transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
-.nav-links a:hover,.nav-links a.active{color:var(--brand-gold);transform:translateZ(6px)}
+.nav-links a:hover,.nav-links a.active{color:var(--black);transform:translateZ(6px)}
 .nav-links a:hover::before,.nav-links a.active::before{transform:scaleX(1);transform-origin:left}
 
 /* Marquee tag color */
