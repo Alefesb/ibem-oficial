@@ -75,11 +75,11 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="inicio" className="relative h-10 min-h-screen flex items-center pt-16 overflow-hidden">
+    <section id="inicio" className="flex flex-row relative h-10 min-h-screen flex items-center pt-16 overflow-hidden">
       <img
         src={heroChurch}
         alt="Pessoas da igreja em um momento de fé"
-        className="absolute inset-50 w-full h-full object-cover scale-50 object-[50%_1%]"
+        className=" absolute inset-30 w-full h-mid object-cover scale-40 object-[100%_1%]"
         width={1920}
         height={1280}
       />
