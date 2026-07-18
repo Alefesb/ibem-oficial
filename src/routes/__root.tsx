@@ -77,9 +77,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "IBEM — Igreja Batista Evangélica Missionária" },
+      { title: "IBEM — Igreja Batista Evangelho e Missões" },
       { name: "description", content: "Bem-vindo à IBEM. Cultos, eventos, transmissões ao vivo, localização e uma comunidade que caminha em fé." },
-      { property: "og:title", content: "IBEM — Igreja Batista Evangélica Missionária" },
+      { property: "og:title", content: "IBEM — Igreja Batista Evangelho e Missões" },
       { property: "og:description", content: "Cultos, eventos, transmissões ao vivo e comunhão." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

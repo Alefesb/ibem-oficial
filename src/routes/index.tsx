@@ -8,10 +8,10 @@ export const Route = createFileRoute("/")({
 });
 
 const cultos = [
-  { day: "Domingo", time: "10h00", title: "Escola Bíblica Dominical", desc: "Estudo da Palavra para todas as idades." },
-  { day: "Domingo", time: "18h30", title: "Culto de Celebração", desc: "Louvor, adoração e mensagem." },
-  { day: "Quarta-feira", time: "19h30", title: "Culto de Oração e Ensino", desc: "Momento de intercessão e edificação." },
-  { day: "Sábado", time: "19h30", title: "Culto de Jovens", desc: "Encontro semanal dos jovens da IBEM." },
+ 
+  { day: "Domingo", time: "17h00", title: "Culto de Celebração", desc: "Louvor, adoração e mensagem." },
+  { day: "Quarta-feira", time: "18h00", title: "Culto de Oração e Ensino", desc: "Momento de intercessão e edificação." },
+  { day: "Sexta-feira", time: "19h30", title: "Culto de Jovens", desc: "Encontro semanal dos jovens da IBEM." },
 ];
 
 const eventos = [
