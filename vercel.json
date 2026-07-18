@@ -1,9 +1,9 @@
 {
   "version": 2,
+  "public": true,
+  "buildCommand": "npm run build",
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/assets/(.*)", "destination": "/assets/$1" },
-    { "source": "/church.css", "destination": "/church.css" },
-    { "source": "/favicon.ico", "destination": "/favicon.ico" },
-    { "source": "/(.*)", "destination": "/api/index.js" }
+    { "source": "/(.*)", "destination": "/api/[...]" }
   ]
 }
