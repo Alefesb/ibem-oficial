@@ -54,7 +54,7 @@ function Nav() {
             alt="Igreja Batista Evangelho e Missões"
             className="h-10 w-10 rounded-full object-cover border border-white/20 shadow-sm transition-transform duration-500 group-hover:[transform:rotateY(180deg)]"
           />
-          <span className="max-w-[220px] font-display text-[0.72rem] sm:text-sm md:text-base font-semibold tracking-tight leading-tight text-foreground">
+          <span className="max-w-[260px] font-display text-sm sm:text-base md:text-lg lg:text-xl font-semibold tracking-tight leading-tight text-foreground">
             Igreja Batista Evangelho e Missões
           </span>
         </a>
@@ -80,31 +80,46 @@ function Hero() {
       <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, oklch(0.14 0.05 260 / 0.92) 40%, oklch(0.14 0.05 260 / 0.55))" }} />
       <FloatingOrbs />
       <div className="container-page relative z-10 py-24">
-        <div className="max-w-2xl text-secondary">
-          <Reveal>
-            <span className="eyebrow"><span className="gold-rule" /> Bem-vindo à Igreja Batista Evangelho e Missões</span>
-          </Reveal>
-          <Reveal delay={120}>
-            <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] font-medium">
-              Uma casa de fé,<br />
-              <span className="shimmer-text" style={{ color: "var(--gold)" }}>uma família</span> em Cristo.
-            </h1>
-          </Reveal>
-          <Reveal delay={240}>
-            <p className="mt-6 text-lg text-secondary/80 max-w-xl leading-relaxed">
-              Igreja Batista Evangélica Missionária — comprometida com a Palavra, a oração e o cuidado uns com os outros. Venha nos visitar.
-            </p>
-          </Reveal>
-          <Reveal delay={360}>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Magnetic>
-                <a href="#cultos" className="btn-primary">Horários de culto <ArrowRight className="w-4 h-4" /></a>
-              </Magnetic>
-              <Magnetic>
-                <a href="#live" className="btn-outline-gold">Assistir ao vivo</a>
-              </Magnetic>
+        <div className="grid lg:grid-cols-[1.05fr_0.95fr] items-center gap-10 lg:gap-16">
+          <div className="max-w-2xl text-secondary">
+            <Reveal>
+              <span className="eyebrow"><span className="gold-rule" /> Bem-vindo à Igreja Batista Evangelho e Missões</span>
+            </Reveal>
+            <Reveal delay={120}>
+              <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] font-medium">
+                Uma casa de fé,<br />
+                <span className="shimmer-text" style={{ color: "var(--gold)" }}>uma família</span> em Cristo.
+              </h1>
+            </Reveal>
+            <Reveal delay={240}>
+              <p className="mt-6 text-lg text-secondary/80 max-w-xl leading-relaxed">
+                Igreja Batista Evangélica Missionária — comprometida com a Palavra, a oração e o cuidado uns com os outros. Venha nos visitar.
+              </p>
+            </Reveal>
+            <Reveal delay={360}>
+              <div className="mt-10 flex flex-wrap gap-4">
+                <Magnetic>
+                  <a href="#cultos" className="btn-primary">Horários de culto <ArrowRight className="w-4 h-4" /></a>
+                </Magnetic>
+                <Magnetic>
+                  <a href="#live" className="btn-outline-gold">Assistir ao vivo</a>
+                </Magnetic>
+              </div>
+            </Reveal>
+          </div>
+
+          <div className="hidden lg:flex justify-end">
+            <div className="relative w-full max-w-[480px] rounded-[2rem] border border-white/20 bg-white/10 p-3 shadow-[0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur-md">
+              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-gold/15 via-transparent to-navy/20" />
+              <img
+                src={heroChurch}
+                alt="Pessoas da igreja em um momento de fé"
+                className="relative h-[480px] w-full rounded-[1.4rem] object-cover object-[70%_50%] shadow-2xl"
+                width={960}
+                height={1280}
+              />
             </div>
-          </Reveal>
+          </div>
         </div>
       </div>
       <div
