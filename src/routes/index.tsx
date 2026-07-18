@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Calendar, Clock, MapPin, Phone, Mail, Youtube, Instagram, Facebook, ArrowRight, Church, HandHeart, BookOpen, Users } from "lucide-react";
-import heroChurch from "@/assets/hero-church.jpeg";
+import heroChurch from "@/assets/hero-church.png";
 import { CursorGlow, TiltCard, Magnetic, Reveal, FloatingOrbs } from "@/components/motion";
 
 export const Route = createFileRoute("/")({
@@ -75,11 +75,11 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="inicio" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+    <section id="inicio" className="relative h-10 min-h-screen flex items-center pt-16 overflow-hidden">
       <img
         src={heroChurch}
         alt="Pessoas da igreja em um momento de fé"
-        className="absolute inset-0 w-full h-full object-cover scale-105 object-[80%_50%]"
+        className=" inset-50 w-full h-full object-cover scale-70 object-[50%_10%]"
         width={1920}
         height={1280}
       />
