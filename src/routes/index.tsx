@@ -366,7 +366,7 @@ function Footer() {
             </span>
           </div>
           <p className="mt-4 text-sm leading-relaxed max-w-xs">
-            Igreja Batista Evangélica Missionária. Amamos a Deus, amamos as pessoas, cumprimos a missão.
+            Igreja Batista Evangelho e Missões. Amamos a Deus, amamos as pessoas, cumprimos a missão.
           </p>
         </div>
         <div>
