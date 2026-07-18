@@ -76,8 +76,19 @@ function Nav() {
 function Hero() {
   return (
     <section id="inicio" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
-      <img src={heroChurch} alt="Interior da igreja com luz dourada" className="absolute inset-0 w-full h-full object-cover scale-105" width={1920} height={1280} />
-      <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, oklch(0.14 0.05 260 / 0.92) 40%, oklch(0.14 0.05 260 / 0.55))" }} />
+      <img
+        src={heroChurch}
+        alt="Pessoas da igreja em um momento de fé"
+        className="absolute inset-0 w-full h-full object-cover scale-105 object-[80%_50%]"
+        width={1920}
+        height={1280}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "linear-gradient(110deg, oklch(0.14 0.05 260 / 0.85) 20%, oklch(0.16 0.04 260 / 0.45) 50%, oklch(0.16 0.03 260 / 0.2) 100%)",
+        }}
+      />
       <FloatingOrbs />
       <div className="container-page relative z-10 py-24">
         <div className="max-w-2xl text-secondary">
