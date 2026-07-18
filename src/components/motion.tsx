@@ -154,11 +154,24 @@ export function Reveal({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
+  const [shown, setShown] = useState(true);
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      setShown(true);
+      return;
+    }
+
+    if (typeof window.IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
+
     const el = ref.current;
     if (!el) return;
-    const io = new IntersectionObserver(
+    const io = new window.IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
@@ -172,6 +185,7 @@ export function Reveal({
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
   return (
     <div
       ref={ref}
