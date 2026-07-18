@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Calendar, Clock, MapPin, Phone, Mail, Youtube, Instagram, Facebook, ArrowRight, Church, HandHeart, BookOpen, Users } from "lucide-react";
-import heroChurch from "@/assets/hero-church.jpg";
+import heroChurch from "@/assets/hero-church.jpeg";
 import { CursorGlow, TiltCard, Magnetic, Reveal, FloatingOrbs } from "@/components/motion";
 
 export const Route = createFileRoute("/")({
