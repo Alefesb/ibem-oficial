@@ -103,7 +103,7 @@ function Hero() {
           </Reveal>
           <Reveal delay={240}>
             <p className="mt-6 text-lg text-secondary/80 max-w-xl leading-relaxed">
-              Igreja Batista Evangelho  Missões — comprometida com a Palavra, a oração e o cuidado uns com os outros. Venha nos visitar.
+              Igreja Batista Evangelho Missões — comprometida com a Palavra, a oração e o cuidado uns com os outros. Venha nos visitar.
             </p>
           </Reveal>
           <Reveal delay={360}>
