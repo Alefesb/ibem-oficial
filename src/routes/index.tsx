@@ -1,604 +1,382 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { Calendar, Clock, MapPin, Phone, Mail, Youtube, Instagram, Facebook, ArrowRight, Church, HandHeart, BookOpen, Users } from "lucide-react";
+import heroChurch from "@/assets/hero-church.jpg";
+import { CursorGlow, TiltCard, Magnetic, Reveal, FloatingOrbs } from "@/components/motion";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "IBEM — Igreja Batista Evangelho e Missões" },
-      {
-        name: "description",
-        content:
-          "Igreja Batista Evangelho e Missões (IBEM): cultos, eventos, liderança pastoral e ferramenta de leitura bíblica online.",
-      },
-      { property: "og:title", content: "IBEM — Igreja Batista Evangelho e Missões" },
-      {
-        property: "og:description",
-        content: "Cultos, eventos e comunhão. Venha visitar-nos.",
-      },
-    ],
-    links: [{ rel: "stylesheet", href: "/church.css" }],
-  }),
   component: Home,
 });
 
-const upcomingEvents = [
-  { d: "12", m: "Jan", title: "Culto de Ano Novo", desc: "Celebração especial de gratidão e consagração para 2027.", meta: "Domingo · 18h" },
-  { d: "25", m: "Jan", title: "Conferência de Missões", desc: "Três noites com pregadores convidados e ofertas missionárias.", meta: "25 a 27 · 19h30" },
-  { d: "08", m: "Fev", title: "Retiro da Família", desc: "Fim de semana de comunhão, ensino e lazer para toda a família.", meta: "Sáb e Dom · integral" },
-  { d: "22", m: "Fev", title: "Batismo nas Águas", desc: "Culto especial de batismo. Inscreva-se com a liderança.", meta: "Domingo · 17h" },
-  { d: "14", m: "Mar", title: "Encontro de Jovens", desc: "Louvor, palavra e comunhão para a nova geração.", meta: "Sábado · 19h" },
-  { d: "05", m: "Abr", title: "Ceia do Senhor", desc: "Momento solene de comunhão e memória do sacrifício de Cristo.", meta: "Domingo · 18h" },
+const cultos = [
+  { day: "Domingo", time: "10h00", title: "Escola Bíblica Dominical", desc: "Estudo da Palavra para todas as idades." },
+  { day: "Domingo", time: "18h30", title: "Culto de Celebração", desc: "Louvor, adoração e mensagem." },
+  { day: "Quarta-feira", time: "19h30", title: "Culto de Oração e Ensino", desc: "Momento de intercessão e edificação." },
+  { day: "Sábado", time: "19h30", title: "Culto de Jovens", desc: "Encontro semanal dos jovens da IBEM." },
 ];
 
-const bibleBooks = [
-  "Gênesis","Êxodo","Levítico","Números","Deuteronômio","Josué","Juízes","Rute",
-  "1 Samuel","2 Samuel","1 Reis","2 Reis","1 Crônicas","2 Crônicas","Esdras","Neemias",
-  "Ester","Jó","Salmos","Provérbios","Eclesiastes","Cânticos","Isaías","Jeremias",
-  "Lamentações","Ezequiel","Daniel","Oséias","Joel","Amós","Obadias","Jonas","Miquéias",
-  "Naum","Habacuque","Sofonias","Ageu","Zacarias","Malaquias",
-  "Mateus","Marcos","Lucas","João","Atos","Romanos","1 Coríntios","2 Coríntios",
-  "Gálatas","Efésios","Filipenses","Colossenses","1 Tessalonicenses","2 Tessalonicenses",
-  "1 Timóteo","2 Timóteo","Tito","Filemom","Hebreus","Tiago","1 Pedro","2 Pedro",
-  "1 João","2 João","3 João","Judas","Apocalipse",
+const eventos = [
+  { date: "12 SET", title: "Congresso de Missões", detail: "Três noites com preletores convidados." },
+  { date: "28 SET", title: "Batismo nas Águas", detail: "Celebração de novos discípulos de Cristo." },
+  { date: "19 OUT", title: "Encontro de Casais", detail: "Um final de semana para restauração e comunhão." },
 ];
 
-// bible-api.com abbreviations (English) matching order above
-const bibleApiIds = [
-  "genesis","exodus","leviticus","numbers","deuteronomy","joshua","judges","ruth",
-  "1 samuel","2 samuel","1 kings","2 kings","1 chronicles","2 chronicles","ezra","nehemiah",
-  "esther","job","psalms","proverbs","ecclesiastes","song of solomon","isaiah","jeremiah",
-  "lamentations","ezekiel","daniel","hosea","joel","amos","obadiah","jonah","micah",
-  "nahum","habakkuk","zephaniah","haggai","zechariah","malachi",
-  "matthew","mark","luke","john","acts","romans","1 corinthians","2 corinthians",
-  "galatians","ephesians","philippians","colossians","1 thessalonians","2 thessalonians",
-  "1 timothy","2 timothy","titus","philemon","hebrews","james","1 peter","2 peter",
-  "1 john","2 john","3 john","jude","revelation",
+const pilares = [
+  { icon: BookOpen, title: "Palavra", text: "Ensino bíblico expositivo, fiel às Escrituras." },
+  { icon: HandHeart, title: "Missões", text: "Enviados a todas as nações, começando em nossa cidade." },
+  { icon: Users, title: "Comunidade", text: "Vida em pequenos grupos e discipulado." },
+  { icon: Church, title: "Adoração", text: "Cultos com reverência, alegria e verdade." },
 ];
 
 function Home() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [showTop, setShowTop] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [formStatus, setFormStatus] = useState<{ msg: string; error?: boolean }>({ msg: "" });
-
-  const [book, setBook] = useState("18"); // Salmos index
-  const [chapter, setChapter] = useState("23");
-  const [verse, setVerse] = useState("");
-  const [bibleText, setBibleText] = useState("Escolha um livro, capítulo (e versículo opcional) e clique em Ler.");
-  const [bibleRef, setBibleRef] = useState("");
-  const [bibleLoading, setBibleLoading] = useState(false);
-
-  const audioIframeRef = useRef<HTMLIFrameElement | null>(null);
-  const activeSectionRef = useRef<string>("inicio");
-  const [activeSection, setActiveSection] = useState("inicio");
-
-  // Reveal on scroll
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("visible");
-            io.unobserve(e.target);
-          }
-        });
-      },
-      { threshold: 0.16 },
-    );
-    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  // Mouse-follow 3D tilt on cards
-  useEffect(() => {
-    const cards = document.querySelectorAll<HTMLElement>(
-      ".event-card, .pastor-card, .glass-card, .gallery-item",
-    );
-    const onMove = (e: MouseEvent) => {
-      const el = e.currentTarget as HTMLElement;
-      const r = el.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width;
-      const y = (e.clientY - r.top) / r.height;
-      const rx = (0.5 - y) * 14;
-      const ry = (x - 0.5) * 14;
-      el.style.transform = `translateY(-8px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
-      el.style.setProperty("--mx", `${x * 100}%`);
-      el.style.setProperty("--my", `${y * 100}%`);
-    };
-    const onLeave = (e: MouseEvent) => {
-      (e.currentTarget as HTMLElement).style.transform = "";
-    };
-    cards.forEach((c) => {
-      c.addEventListener("mousemove", onMove as EventListener);
-      c.addEventListener("mouseleave", onLeave as EventListener);
-    });
-    return () => {
-      cards.forEach((c) => {
-        c.removeEventListener("mousemove", onMove as EventListener);
-        c.removeEventListener("mouseleave", onLeave as EventListener);
-      });
-    };
-  }, []);
-
-
-  // Section highlight + back-to-top
-  useEffect(() => {
-    const so = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            activeSectionRef.current = entry.target.id;
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -55% 0px" },
-    );
-    document.querySelectorAll("main section[id]").forEach((s) => so.observe(s));
-    const onScroll = () => setShowTop(window.scrollY > 620);
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      so.disconnect();
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  // Try to start the ambient pad after first user interaction (browsers block autoplay-with-sound)
-  useEffect(() => {
-    const start = () => {
-      if (!playing) togglePlay(true);
-      window.removeEventListener("pointerdown", start);
-      window.removeEventListener("keydown", start);
-    };
-    window.addEventListener("pointerdown", start, { once: true });
-    window.addEventListener("keydown", start, { once: true });
-    return () => {
-      window.removeEventListener("pointerdown", start);
-      window.removeEventListener("keydown", start);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function togglePlay(force?: boolean) {
-    const next = force ?? !playing;
-    setPlaying(next);
-    const iframe = audioIframeRef.current;
-    if (!iframe) return;
-    
-    if (next) {
-      iframe.contentWindow?.postMessage(
-        JSON.stringify({ event: "command", func: "playVideo", args: [] }),
-        "*",
-      );
-      // Set volume to 5% after a delay to ensure video is loaded
-      for (let i = 0; i < 5; i++) {
-        setTimeout(() => {
-          iframe.contentWindow?.postMessage(
-            JSON.stringify({ event: "command", func: "setVolume", args: [5] }),
-            "*",
-          );
-        }, 300 + i * 200);
-      }
-    } else {
-      iframe.contentWindow?.postMessage(
-        JSON.stringify({ event: "command", func: "pauseVideo", args: [] }),
-        "*",
-      );
-    }
-  }
-
-  async function fetchBible(e: React.FormEvent) {
-    e.preventDefault();
-    setBibleLoading(true);
-    setBibleRef("");
-    try {
-      const bookName = bibleApiIds[Number(book)];
-      const ref = verse ? `${bookName} ${chapter}:${verse}` : `${bookName} ${chapter}`;
-      const url = `https://bible-api.com/${encodeURIComponent(ref)}?translation=almeida`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error("Referência não encontrada");
-      const data = await res.json();
-      setBibleText(data.text?.trim() || "Texto não disponível.");
-      setBibleRef(
-        `${bibleBooks[Number(book)]} ${chapter}${verse ? ":" + verse : ""} — Almeida`,
-      );
-    } catch {
-      setBibleText("Não foi possível carregar essa passagem. Verifique a referência e tente novamente.");
-      setBibleRef("");
-    } finally {
-      setBibleLoading(false);
-    }
-  }
-
-  function submitContact(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const f = e.currentTarget;
-    const name = (f.elements.namedItem("name") as HTMLInputElement).value.trim();
-    const email = (f.elements.namedItem("email") as HTMLInputElement).value.trim();
-    const message = (f.elements.namedItem("message") as HTMLTextAreaElement).value.trim();
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!name || !email || !message) return setFormStatus({ msg: "Preencha todos os campos para enviar sua mensagem.", error: true });
-    if (!emailOk) return setFormStatus({ msg: "Informe um e-mail válido.", error: true });
-    setFormStatus({ msg: "Mensagem validada com sucesso. Obrigado pelo contato!" });
-    f.reset();
-  }
-
-  const navItems = [
-    ["inicio", "Início"],
-    ["eventos", "Eventos"],
-    ["quem-somos", "Quem Somos"],
-    ["programacoes", "Programações"],
-    ["pastores", "Pastores"],
-    ["biblia", "Bíblia"],
-    ["galeria", "Galeria"],
-    ["localizacao", "Localização"],
-    ["contato", "Contato"],
-  ] as const;
-
-  const marqueeItems = upcomingEvents.slice(0, 5);
-
   return (
-    <>
-      {/* Ambient pad – hidden YouTube iframe controlled via postMessage */}
-      <iframe
-        ref={audioIframeRef}
-        className="audio-hidden-frame"
-        title="Ambient pad"
-        allow="autoplay"
-        src="https://www.youtube.com/embed/S7UTea5zzFA?enablejsapi=1&autoplay=0&loop=1&playlist=S7UTea5zzFA&controls=0"
-      />
+    <div className="bg-background text-foreground overflow-x-hidden">
+      <CursorGlow />
+      <Nav />
+      <Hero />
+      <Pilares />
+      <Cultos />
+      <Live />
+      <Eventos />
+      <Localizacao />
+      <Contato />
+      <Footer />
+    </div>
+  );
+}
 
-      {/* Marquee banner */}
-      <div className="events-banner" aria-label="Próximos eventos">
-        <div className="events-banner-track">
-          {[...marqueeItems, ...marqueeItems].map((ev, i) => (
-            <span key={i}>
-              <b>{ev.d} {ev.m}</b>
-              {ev.title} — {ev.meta}
-            </span>
+function Nav() {
+  return (
+    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-background/80 border-b border-border">
+      <div className="container-page flex items-center justify-between h-16">
+        <a href="#inicio" className="flex items-center gap-2 group">
+          <span
+            className="grid place-items-center w-9 h-9 rounded-md transition-transform duration-500 group-hover:[transform:rotateY(180deg)]"
+            style={{ background: "var(--gradient-navy)", transformStyle: "preserve-3d" }}
+          >
+            <Church className="w-5 h-5" style={{ color: "var(--gold)" }} />
+          </span>
+          <span className="font-display text-xl font-semibold tracking-tight">IBEM</span>
+        </a>
+        <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
+          <a href="#cultos" className="hover:text-foreground transition">Cultos</a>
+          <a href="#live" className="hover:text-foreground transition">Ao Vivo</a>
+          <a href="#eventos" className="hover:text-foreground transition">Eventos</a>
+          <a href="#localizacao" className="hover:text-foreground transition">Localização</a>
+          <a href="#contato" className="hover:text-foreground transition">Contato</a>
+        </nav>
+        <Magnetic>
+          <a href="#contato" className="btn-outline-gold text-sm hidden sm:inline-flex">Visite-nos</a>
+        </Magnetic>
+      </div>
+    </header>
+  );
+}
+
+function Hero() {
+  return (
+    <section id="inicio" className="relative min-h-screen flex items-center pt-16 overflow-hidden">
+      <img src={heroChurch} alt="Interior da igreja com luz dourada" className="absolute inset-0 w-full h-full object-cover scale-105" width={1920} height={1280} />
+      <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, oklch(0.14 0.05 260 / 0.92) 40%, oklch(0.14 0.05 260 / 0.55))" }} />
+      <FloatingOrbs />
+      <div className="container-page relative z-10 py-24">
+        <div className="max-w-2xl text-secondary">
+          <Reveal>
+            <span className="eyebrow"><span className="gold-rule" /> Bem-vindo à IBEM</span>
+          </Reveal>
+          <Reveal delay={120}>
+            <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] font-medium">
+              Uma casa de fé,<br />
+              <span className="shimmer-text" style={{ color: "var(--gold)" }}>uma família</span> em Cristo.
+            </h1>
+          </Reveal>
+          <Reveal delay={240}>
+            <p className="mt-6 text-lg text-secondary/80 max-w-xl leading-relaxed">
+              Igreja Batista Evangélica Missionária — comprometida com a Palavra, a oração e o cuidado uns com os outros. Venha nos visitar.
+            </p>
+          </Reveal>
+          <Reveal delay={360}>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Magnetic>
+                <a href="#cultos" className="btn-primary">Horários de culto <ArrowRight className="w-4 h-4" /></a>
+              </Magnetic>
+              <Magnetic>
+                <a href="#live" className="btn-outline-gold">Assistir ao vivo</a>
+              </Magnetic>
+            </div>
+          </Reveal>
+        </div>
+      </div>
+      <div
+        aria-hidden
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 w-6 h-10 rounded-full border border-gold/40 grid place-items-start p-1"
+      >
+        <span className="w-1 h-2 rounded-full bg-gold animate-bounce" />
+      </div>
+    </section>
+  );
+}
+
+function Pilares() {
+  return (
+    <section className="py-24 bg-secondary">
+      <div className="container-page">
+        <div className="grid md:grid-cols-4 gap-8">
+          {pilares.map((p, i) => (
+            <Reveal key={p.title} delay={i * 100}>
+              <TiltCard intensity={12} className="h-full">
+                <div className="p-6 rounded-lg bg-white border border-transparent hover:border-gold/30 transition-colors h-full">
+                  <div
+                    className="w-12 h-12 grid place-items-center rounded-md"
+                    style={{ background: "var(--gradient-navy)", transform: "translateZ(30px)" }}
+                  >
+                    <p.icon className="w-5 h-5" style={{ color: "var(--gold)" }} />
+                  </div>
+                  <h3 className="mt-5 text-2xl font-semibold text-primary" style={{ transform: "translateZ(20px)" }}>{p.title}</h3>
+                  <div className="gold-rule mt-3" />
+                  <p className="mt-3 text-muted-foreground leading-relaxed">{p.text}</p>
+                </div>
+              </TiltCard>
+            </Reveal>
           ))}
         </div>
       </div>
+    </section>
+  );
+}
 
-      <header className="site-header" id="topo">
-        <nav className="navbar" aria-label="Menu principal">
-          <a className="brand" href="#inicio" aria-label="IBEM - Início">
-            <span className="brand-mark">
-              <img src="/favicon.ico" alt="IBEM logo" />
-            </span>
-            <span className="brand-text">
-              <strong>Igreja Batista</strong>
-              <small>Evangelho e Missões</small>
-            </span>
-          </a>
-          <button
-            className={`menu-toggle ${menuOpen ? "open" : ""}`}
-            type="button"
-            aria-label="Abrir menu"
-            aria-expanded={menuOpen}
-            aria-controls="main-menu"
-            onClick={() => setMenuOpen((v) => !v)}
-          >
-            <span></span><span></span><span></span>
-          </button>
-          <ul className={`nav-links ${menuOpen ? "open" : ""}`} id="main-menu">
-            {navItems.map(([id, label]) => (
-              <li key={id}>
-                <a
-                  href={`#${id}`}
-                  className={activeSection === id ? "active" : ""}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {label}
+function Cultos() {
+  return (
+    <section id="cultos" className="py-24 relative overflow-hidden" style={{ background: "var(--gradient-navy)" }}>
+      <FloatingOrbs />
+      <div className="container-page text-secondary relative">
+        <Reveal>
+          <div className="max-w-2xl">
+            <span className="eyebrow"><span className="gold-rule" /> Horários</span>
+            <h2 className="mt-4 text-4xl sm:text-5xl font-medium">Cultos e reuniões</h2>
+            <p className="mt-4 text-secondary/70">Encontre o momento certo para você e sua família adorar conosco.</p>
+          </div>
+        </Reveal>
+        <div className="mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cultos.map((c, i) => (
+            <Reveal key={c.title} delay={i * 90}>
+              <TiltCard intensity={14} className="h-full">
+                <article className="p-6 rounded-lg border border-white/10 bg-white/[0.04] backdrop-blur-sm hover:bg-white/[0.08] transition h-full">
+                  <div className="flex items-center gap-2 text-sm" style={{ color: "var(--gold)", transform: "translateZ(25px)" }}>
+                    <Calendar className="w-4 h-4" />
+                    <span className="uppercase tracking-widest">{c.day}</span>
+                  </div>
+                  <div className="mt-3 flex items-baseline gap-2" style={{ transform: "translateZ(40px)" }}>
+                    <Clock className="w-4 h-4 text-secondary/60" />
+                    <span className="font-display text-3xl font-semibold">{c.time}</span>
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold">{c.title}</h3>
+                  <p className="mt-2 text-sm text-secondary/70 leading-relaxed">{c.desc}</p>
+                </article>
+              </TiltCard>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Live() {
+  return (
+    <section id="live" className="py-24 bg-background relative overflow-hidden">
+      <div className="container-page grid lg:grid-cols-2 gap-14 items-center">
+        <Reveal>
+          <div>
+            <span className="eyebrow"><span className="gold-rule" /> Transmissão</span>
+            <h2 className="mt-4 text-4xl sm:text-5xl font-medium text-primary">Ao vivo, todos os cultos.</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed max-w-lg">
+              Não pôde estar presente? Acompanhe cada momento pelo nosso canal no YouTube. Louvor, mensagem e comunhão à distância de um clique.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Magnetic>
+                <a href="https://youtube.com" target="_blank" rel="noreferrer" className="btn-primary" style={{ animation: "pulse-gold 2.4s ease-out infinite" }}>
+                  <Youtube className="w-4 h-4" /> Abrir no YouTube
                 </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
-
-      <main>
-        <section className="hero section" id="inicio" aria-label="Página inicial">
-          <div className="hero-content reveal">
-            <p className="section-kicker">Igreja Batista Evangelho e Missões</p>
-            <h1>Bem-vindo à Igreja Batista Evangelho e Missões</h1>
-            <p className="hero-subtitle">Um lugar para adorar, aprender a Palavra de Deus e viver em comunhão.</p>
-            <blockquote>
-              “Ide por todo o mundo e pregai o evangelho a toda criatura.” <cite>— Marcos 16:15</cite>
-            </blockquote>
-            <div className="hero-actions">
-              <a className="btn btn-primary" href="#localizacao">Visite-nos</a>
-              <a className="btn btn-secondary" href="#eventos">Próximos eventos</a>
+              </Magnetic>
+              <Magnetic>
+                <a href="#eventos" className="btn-outline-gold">Ver programação</a>
+              </Magnetic>
             </div>
           </div>
-        </section>
-
-        <section className="section events-section" id="eventos">
-          <div className="container">
-            <div className="section-heading centered reveal">
-              <p className="section-kicker" style={{ color: "#f5c869" }}>Agenda</p>
-              <h2>Próximos eventos</h2>
-              <p style={{ color: "rgba(255,255,255,.8)" }}>
-                Marque na sua agenda e venha viver esses momentos conosco.
-              </p>
-            </div>
-            <div className="events-grid">
-              {upcomingEvents.map((ev, i) => (
-                <article key={i} className="event-card reveal">
-                  <div className="event-date"><span className="d">{ev.d}</span><span className="m">{ev.m}</span></div>
-                  <h3>{ev.title}</h3>
-                  <p>{ev.desc}</p>
-                  <div className="event-meta">{ev.meta}</div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section about-section" id="quem-somos">
-          <div className="container">
-            <div className="section-heading reveal">
-              <p className="section-kicker">Quem Somos</p>
-              <h2>Uma comunidade cristã de acolhimento, comunhão e missão.</h2>
-            </div>
-            <div className="about-grid">
-              <div className="about-copy reveal">
-                <p>
-                  A Igreja Batista Evangelho e Missões (IBEM) é uma comunidade cristã comprometida em anunciar o
-                  Evangelho de Jesus Cristo, servir ao próximo e promover o crescimento espiritual de vidas e famílias.
-                  Nossa igreja busca ser um lugar de acolhimento, comunhão e transformação, onde cada pessoa possa
-                  experimentar o amor de Deus e desenvolver um relacionamento verdadeiro com Cristo.
-                </p>
-              </div>
-              <div className="identity-cards">
-                <article className="glass-card reveal">
-                  <span className="card-icon" aria-hidden="true">✦</span>
-                  <h3>Missão</h3>
-                  <p>Proclamar o Evangelho de Jesus Cristo, fazer discípulos e servir à comunidade com amor, fé e dedicação, cumprindo o chamado de Deus para alcançar vidas e transformar corações.</p>
-                </article>
-                <article className="glass-card reveal">
-                  <span className="card-icon" aria-hidden="true">◎</span>
-                  <h3>Visão</h3>
-                  <p>Ser uma igreja relevante, comprometida com a Palavra de Deus, reconhecida pelo amor ao próximo, pela excelência no serviço cristão e pelo impacto positivo na sociedade através das missões e do discipulado.</p>
-                </article>
-                <article className="glass-card reveal">
-                  <span className="card-icon" aria-hidden="true">◇</span>
-                  <h3>Valores</h3>
-                  <ul className="values-list">
-                    <li><strong>Fé</strong> — Confiamos plenamente em Deus e em Sua Palavra.</li>
-                    <li><strong>Amor</strong> — Demonstramos o amor de Cristo em nossas ações.</li>
-                    <li><strong>Comunhão</strong> — Valorizamos a unidade e o cuidado entre os irmãos.</li>
-                    <li><strong>Missões</strong> — Trabalhamos para levar o Evangelho a todos.</li>
-                    <li><strong>Serviço</strong> — Servimos com humildade e dedicação.</li>
-                    <li><strong>Integridade</strong> — Buscamos viver de acordo com os princípios bíblicos.</li>
-                  </ul>
-                </article>
+        </Reveal>
+        <Reveal delay={150}>
+          <TiltCard intensity={8}>
+            <div className="relative">
+              <div className="absolute -inset-4 rounded-xl" style={{ background: "var(--gradient-gold)", opacity: 0.28, filter: "blur(28px)" }} />
+              <div className="relative aspect-video rounded-xl overflow-hidden border border-border shadow-[var(--shadow-elegant)]" style={{ transform: "translateZ(30px)" }}>
+                <iframe
+                  className="w-full h-full"
+                  src="https://www.youtube.com/embed/live_stream?channel=UC_x5XG1OV2P6uZZ5FSM9Ttw"
+                  title="Transmissão ao vivo IBEM"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
               </div>
             </div>
-          </div>
-        </section>
+          </TiltCard>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
 
-        <section className="section program-section" id="programacoes">
-          <div className="container">
-            <div className="section-heading centered reveal">
-              <p className="section-kicker">Programações</p>
-              <h2>Encontros semanais da IBEM</h2>
-              <p>Participe dos cultos e caminhe conosco em adoração, oração e ensino da Palavra.</p>
+function Eventos() {
+  return (
+    <section id="eventos" className="py-24 bg-muted">
+      <div className="container-page">
+        <Reveal>
+          <div className="flex items-end justify-between flex-wrap gap-6">
+            <div className="max-w-xl">
+              <span className="eyebrow"><span className="gold-rule" /> Agenda</span>
+              <h2 className="mt-4 text-4xl sm:text-5xl font-medium text-primary">Próximos eventos</h2>
             </div>
-            <div className="schedule-card reveal">
-              <table>
-                <thead>
-                  <tr><th>Programação</th><th>Dia</th><th>Horário</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td>Culto de Celebração</td><td>Domingo</td><td>18h</td></tr>
-                  <tr><td>Culto de Oração</td><td>Quarta</td><td>19h30</td></tr>
-                  <tr><td>Culto de Ensino</td><td>Sexta</td><td>19h30</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section className="section pastors-section" id="pastores">
-          <div className="container">
-            <div className="section-heading centered reveal">
-              <p className="section-kicker">Liderança Pastoral</p>
-              <h2>Conheça os pastores da IBEM</h2>
-              <p style={{ color: "#4a5a6f" }}>
-                Homens de Deus dedicados ao ensino da Palavra, ao cuidado das ovelhas e ao avanço do Reino.
-              </p>
-            </div>
-            <div className="pastors-grid">
-              <article className="pastor-card reveal">
-                <div
-                  className="pastor-avatar"
-                  style={{ backgroundImage: "url(https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80)" }}
-                />
-                <h3>Pr. Josué Almeida</h3>
-                <div className="pastor-role">Pastor Titular</div>
-                <p>Consagrado ao ministério há mais de 20 anos, o Pr. Josué conduz a igreja com sabedoria bíblica, cuidado pastoral e paixão pelas missões.</p>
-              </article>
-              <article className="pastor-card reveal">
-                <div
-                  className="pastor-avatar"
-                  style={{ backgroundImage: "url(https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80)" }}
-                />
-                <h3>Pr. Daniel Rocha</h3>
-                <div className="pastor-role">Pastor Auxiliar</div>
-                <p>Responsável pelo ensino da Palavra e pelo ministério de jovens, dedica-se à formação de discípulos comprometidos com Cristo.</p>
-              </article>
-              <article className="pastor-card reveal">
-                <div
-                  className="pastor-avatar"
-                  style={{ backgroundImage: "url(https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=400&q=80)" }}
-                />
-                <h3>Pra. Marta Almeida</h3>
-                <div className="pastor-role">Ministério Feminino</div>
-                <p>Atua no aconselhamento cristão, discipulado de mulheres e no cuidado com as famílias da igreja.</p>
-              </article>
-            </div>
-          </div>
-        </section>
-
-        <section className="section bible-section" id="biblia">
-          <div className="container">
-            <div className="section-heading centered reveal">
-              <p className="section-kicker">Palavra de Deus</p>
-              <h2>Leia a Bíblia agora</h2>
-              <p>Selecione o livro, o capítulo e (opcionalmente) o versículo para ler diretamente aqui no site.</p>
-            </div>
-            <div className="bible-tool reveal">
-              <form className="bible-form" onSubmit={fetchBible}>
-                <select value={book} onChange={(e) => setBook(e.target.value)} aria-label="Livro">
-                  {bibleBooks.map((b, i) => <option key={i} value={i}>{b}</option>)}
-                </select>
-                <input
-                  type="number" min={1} placeholder="Cap." aria-label="Capítulo"
-                  value={chapter} onChange={(e) => setChapter(e.target.value)}
-                />
-                <input
-                  type="text" placeholder="Vers. (opcional)" aria-label="Versículo"
-                  value={verse} onChange={(e) => setVerse(e.target.value)}
-                />
-                <button type="submit" disabled={bibleLoading}>{bibleLoading ? "Carregando…" : "Ler"}</button>
-              </form>
-              <div className={`bible-result ${bibleLoading ? "bible-loading" : ""}`}>
-                {bibleText}
-                {bibleRef && <span className="ref">{bibleRef}</span>}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section gallery-section" id="galeria">
-          <div className="container">
-            <div className="section-heading centered reveal">
-              <p className="section-kicker">Galeria</p>
-              <h2>Momentos de fé, comunhão e serviço</h2>
-            </div>
-            <div className="gallery-grid">
-              {[
-                "https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=900&q=80",
-                "https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=900&q=80",
-                "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=900&q=80",
-                "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80",
-                "https://images.unsplash.com/photo-1523803326055-9729b9e02e5a?auto=format&fit=crop&w=900&q=80",
-                "https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=900&q=80",
-              ].map((src, i) => (
-                <figure key={i} className="gallery-item reveal">
-                  <img src={src} alt="Momento da IBEM" loading="lazy" />
-                </figure>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section location-section" id="localizacao">
-          <div className="container location-grid">
-            <div className="location-content reveal">
-              <p className="section-kicker">Localização</p>
-              <h2>Venha cultuar conosco</h2>
-              <p>Rua Exemplo, 123 – Salvador/BA</p>
-              <a
-                className="btn btn-primary"
-                href="https://www.google.com/maps/search/?api=1&query=Rua%20Exemplo%20123%20Salvador%20BA"
-                target="_blank" rel="noopener noreferrer"
-              >Como chegar</a>
-            </div>
-            <div className="map-card reveal">
-              <iframe
-                title="Mapa da IBEM em Salvador"
-                src="https://www.google.com/maps?q=Salvador%20BA&output=embed"
-                width={600} height={450} style={{ border: 0 }}
-                allowFullScreen loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </div>
-        </section>
-
-        <section className="section contact-section" id="contato">
-          <div className="container contact-grid">
-            <div className="contact-info reveal">
-              <p className="section-kicker">Contato</p>
-              <h2>Fale com a IBEM</h2>
-              <p>Será uma alegria receber sua mensagem, pedido de oração ou visita.</p>
-              <ul className="contact-list">
-                <li><strong>WhatsApp:</strong> <a href="https://wa.me/5571999999999" target="_blank" rel="noopener noreferrer">(71) 9 9999-9999</a></li>
-                <li><strong>Instagram:</strong> <a href="https://www.instagram.com/ibemoficial" target="_blank" rel="noopener noreferrer">@ibemoficial</a></li>
-                <li><strong>E-mail:</strong> <a href="mailto:contato@ibem.com.br">contato@ibem.com.br</a></li>
-              </ul>
-            </div>
-            <form className="contact-form reveal" id="contact-form" noValidate onSubmit={submitContact}>
-              <label htmlFor="name">Nome</label>
-              <input id="name" name="name" type="text" placeholder="Seu nome" required />
-
-              <label htmlFor="email">E-mail</label>
-              <input id="email" name="email" type="email" placeholder="seuemail@exemplo.com" required />
-
-              <label htmlFor="message">Mensagem</label>
-              <textarea id="message" name="message" rows={5} placeholder="Escreva sua mensagem" required />
-
-              <p className={`form-status ${formStatus.error ? "error" : ""}`} role="status" aria-live="polite">
-                {formStatus.msg}
-              </p>
-              <button className="btn btn-primary" type="submit">Enviar Mensagem</button>
-            </form>
-          </div>
-        </section>
-      </main>
-
-      <footer className="site-footer">
-        <div className="container footer-grid">
-          <div>
-            <a className="brand footer-brand" href="#inicio" aria-label="IBEM - Início">
-              <span className="brand-mark">IBEM</span>
-              <span className="brand-text">
-                <strong>Igreja Batista</strong>
-                <small>Evangelho e Missões</small>
-              </span>
+            <a href="#contato" className="text-sm font-medium hover:underline" style={{ color: "var(--ink)" }}>
+              Ver todos <ArrowRight className="inline w-4 h-4" />
             </a>
-            <p>Igreja Batista Evangelho e Missões (IBEM)</p>
-            <p>Pregando o Evangelho, fazendo discípulos e alcançando vidas para Cristo.</p>
           </div>
-          <div>
-            <h3>Links rápidos</h3>
-            <ul className="footer-links">
-              {navItems.map(([id, label]) => (
-                <li key={id}><a href={`#${id}`}>{label}</a></li>
-              ))}
+        </Reveal>
+        <div className="mt-12 grid md:grid-cols-3 gap-6">
+          {eventos.map((e, i) => (
+            <Reveal key={e.title} delay={i * 120}>
+              <TiltCard intensity={12} className="h-full">
+                <article className="group bg-card rounded-lg border border-border overflow-hidden hover:shadow-[var(--shadow-elegant)] transition h-full">
+                  <div className="p-6 border-b border-border flex items-center justify-between" style={{ transform: "translateZ(25px)" }}>
+                    <span className="font-display text-2xl font-semibold text-primary">{e.date}</span>
+                    <span className="w-10 h-10 grid place-items-center rounded-full border border-gold/40 group-hover:bg-gold/10 transition">
+                      <Calendar className="w-4 h-4" style={{ color: "var(--gold)" }} />
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-primary">{e.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{e.detail}</p>
+                  </div>
+                </article>
+              </TiltCard>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Localizacao() {
+  return (
+    <section id="localizacao" className="py-24 bg-background">
+      <div className="container-page grid lg:grid-cols-2 gap-14 items-stretch">
+        <Reveal>
+          <div className="flex flex-col justify-center h-full">
+            <span className="eyebrow"><span className="gold-rule" /> Onde estamos</span>
+            <h2 className="mt-4 text-4xl sm:text-5xl font-medium text-primary">Venha nos visitar</h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed max-w-lg">
+              Nossa casa está sempre aberta. Traga sua família, seus amigos — todos são bem-vindos.
+            </p>
+            <ul className="mt-8 space-y-4 text-sm">
+              <li className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 mt-0.5" style={{ color: "var(--gold)" }} />
+                <span>Rua da Fé, 123 — Centro<br />Sua Cidade, Estado — CEP 00000-000</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Phone className="w-5 h-5 mt-0.5" style={{ color: "var(--gold)" }} />
+                <span>(00) 0000-0000</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <Mail className="w-5 h-5 mt-0.5" style={{ color: "var(--gold)" }} />
+                <span>contato@ibem.org.br</span>
+              </li>
             </ul>
           </div>
-          <div>
-            <h3>Redes sociais</h3>
-            <div className="social-links">
-              <a href="https://www.instagram.com/ibemoficial" target="_blank" rel="noopener noreferrer">Instagram</a>
-              <a href="https://wa.me/5571999999999" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-              <a href="mailto:contato@ibem.com.br">E-mail</a>
+        </Reveal>
+        <Reveal delay={150}>
+          <TiltCard intensity={6}>
+            <div className="rounded-xl overflow-hidden border border-border shadow-[var(--shadow-elegant)] min-h-[380px]">
+              <iframe
+                title="Mapa IBEM"
+                src="https://www.google.com/maps?q=Igreja+Batista&output=embed"
+                className="w-full h-full min-h-[380px]"
+                loading="lazy"
+              />
             </div>
+          </TiltCard>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Contato() {
+  return (
+    <section id="contato" className="py-24 relative overflow-hidden" style={{ background: "var(--gradient-navy)" }}>
+      <FloatingOrbs />
+      <div className="container-page text-secondary relative">
+        <Reveal>
+          <div className="max-w-2xl mx-auto text-center">
+            <span className="eyebrow justify-center"><span className="gold-rule" /> Fale conosco</span>
+            <h2 className="mt-4 text-4xl sm:text-5xl font-medium">Estamos à sua disposição</h2>
+            <p className="mt-4 text-secondary/70">Envie sua mensagem — pedidos de oração, dúvidas ou primeira visita.</p>
+          </div>
+        </Reveal>
+        <Reveal delay={150}>
+          <form className="mt-12 max-w-2xl mx-auto grid gap-4" onSubmit={(e) => e.preventDefault()}>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <input required placeholder="Seu nome" className="bg-white/5 border border-white/15 rounded-md px-4 py-3 text-secondary placeholder:text-secondary/40 focus:outline-none focus:border-gold transition" />
+              <input required type="email" placeholder="Seu e-mail" className="bg-white/5 border border-white/15 rounded-md px-4 py-3 text-secondary placeholder:text-secondary/40 focus:outline-none focus:border-gold transition" />
+            </div>
+            <textarea required rows={5} placeholder="Sua mensagem" className="bg-white/5 border border-white/15 rounded-md px-4 py-3 text-secondary placeholder:text-secondary/40 focus:outline-none focus:border-gold transition resize-none" />
+            <Magnetic className="justify-self-start">
+              <button type="submit" className="btn-primary">Enviar mensagem <ArrowRight className="w-4 h-4" /></button>
+            </Magnetic>
+          </form>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="bg-ink text-secondary/70">
+      <div className="container-page py-14 grid md:grid-cols-3 gap-10">
+        <div>
+          <div className="flex items-center gap-2">
+            <span className="grid place-items-center w-9 h-9 rounded-md" style={{ background: "var(--gradient-gold)" }}>
+              <Church className="w-5 h-5" style={{ color: "var(--ink)" }} />
+            </span>
+            <span className="font-display text-xl font-semibold text-secondary">IBEM</span>
+          </div>
+          <p className="mt-4 text-sm leading-relaxed max-w-xs">
+            Igreja Batista Evangélica Missionária. Amamos a Deus, amamos as pessoas, cumprimos a missão.
+          </p>
+        </div>
+        <div>
+          <h4 className="text-secondary font-semibold text-sm uppercase tracking-widest">Navegue</h4>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li><a href="#cultos" className="hover:text-gold transition">Cultos</a></li>
+            <li><a href="#live" className="hover:text-gold transition">Ao vivo</a></li>
+            <li><a href="#eventos" className="hover:text-gold transition">Eventos</a></li>
+            <li><a href="#localizacao" className="hover:text-gold transition">Localização</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="text-secondary font-semibold text-sm uppercase tracking-widest">Redes</h4>
+          <div className="mt-4 flex gap-3">
+            <Magnetic><a href="#" aria-label="Instagram" className="w-10 h-10 grid place-items-center rounded-full border border-white/15 hover:border-gold hover:text-gold transition"><Instagram className="w-4 h-4" /></a></Magnetic>
+            <Magnetic><a href="#" aria-label="Facebook" className="w-10 h-10 grid place-items-center rounded-full border border-white/15 hover:border-gold hover:text-gold transition"><Facebook className="w-4 h-4" /></a></Magnetic>
+            <Magnetic><a href="#" aria-label="YouTube" className="w-10 h-10 grid place-items-center rounded-full border border-white/15 hover:border-gold hover:text-gold transition"><Youtube className="w-4 h-4" /></a></Magnetic>
           </div>
         </div>
-        <div className="footer-bottom">© 2026 – Todos os direitos reservados.</div>
-      </footer>
-
-      <button
-        className={`back-to-top ${showTop ? "visible" : ""}`}
-        type="button" aria-label="Voltar ao topo"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-      >↑</button>
-
-      <div
-        className={`audio-player ${playing ? "playing" : ""}`}
-        onClick={() => togglePlay()}
-        role="button"
-        aria-pressed={playing}
-        aria-label={playing ? "Pausar música ambiente" : "Tocar música ambiente"}
-        title={playing ? "Pausar música ambiente" : "Tocar música ambiente"}
-      >
-        <span className="icon">{playing ? "❚❚" : "▶"}</span>
-        <span>{playing ? "Pad tocando" : "Música ambiente"}</span>
       </div>
-    </>
+      <div className="border-t border-white/10">
+        <div className="container-page py-6 text-xs flex flex-wrap justify-between gap-2">
+          <span>© {new Date().getFullYear()} IBEM. Todos os direitos reservados.</span>
+          <span>Feito com fé.</span>
+        </div>
+      </div>
+    </footer>
   );
 }

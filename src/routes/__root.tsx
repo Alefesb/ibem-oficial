@@ -7,9 +7,10 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -36,6 +37,9 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  useEffect(() => {
+    reportLovableError(error, { boundary: "tanstack_root_error_component" });
+  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -73,18 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "IBEM — Igreja Batista Evangelho e Missões" },
-      { name: "description", content: "Site oficial da IBEM: cultos, eventos, liderança pastoral, leitura bíblica e contato." },
-      { property: "og:title", content: "IBEM — Igreja Batista Evangelho e Missões" },
-      { property: "og:description", content: "Cultos, eventos e comunhão. Venha visitar-nos." },
+      { title: "IBEM — Igreja Batista Evangélica Missionária" },
+      { name: "description", content: "Bem-vindo à IBEM. Cultos, eventos, transmissões ao vivo, localização e uma comunidade que caminha em fé." },
+      { property: "og:title", content: "IBEM — Igreja Batista Evangélica Missionária" },
+      { property: "og:description", content: "Cultos, eventos, transmissões ao vivo e comunhão." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
+      { rel: "stylesheet", href: appCss },
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
