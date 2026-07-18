@@ -47,15 +47,16 @@ function Home() {
 function Nav() {
   return (
     <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-background/80 border-b border-border">
-      <div className="container-page flex items-center justify-between h-16">
-        <a href="#inicio" className="flex items-center gap-2 group">
-          <span
-            className="grid place-items-center w-9 h-9 rounded-md transition-transform duration-500 group-hover:[transform:rotateY(180deg)]"
-            style={{ background: "var(--gradient-navy)", transformStyle: "preserve-3d" }}
-          >
-            <Church className="w-5 h-5" style={{ color: "var(--gold)" }} />
+      <div className="container-page flex items-center justify-between min-h-16 py-3">
+        <a href="#inicio" className="flex items-center gap-3 group min-w-0">
+          <img
+            src="/favicon.ico"
+            alt="Igreja Batista Evangelho e Missões"
+            className="h-10 w-10 rounded-full object-cover border border-white/20 shadow-sm transition-transform duration-500 group-hover:[transform:rotateY(180deg)]"
+          />
+          <span className="max-w-[220px] font-display text-[0.72rem] sm:text-sm md:text-base font-semibold tracking-tight leading-tight text-foreground">
+            Igreja Batista Evangelho e Missões
           </span>
-          <span className="font-display text-xl font-semibold tracking-tight">IBEM</span>
         </a>
         <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
           <a href="#cultos" className="hover:text-foreground transition">Cultos</a>
@@ -81,7 +82,7 @@ function Hero() {
       <div className="container-page relative z-10 py-24">
         <div className="max-w-2xl text-secondary">
           <Reveal>
-            <span className="eyebrow"><span className="gold-rule" /> Bem-vindo à IBEM</span>
+            <span className="eyebrow"><span className="gold-rule" /> Bem-vindo à Igreja Batista Evangelho e Missões</span>
           </Reveal>
           <Reveal delay={120}>
             <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] font-medium">
@@ -343,11 +344,15 @@ function Footer() {
     <footer className="bg-ink text-secondary/70">
       <div className="container-page py-14 grid md:grid-cols-3 gap-10">
         <div>
-          <div className="flex items-center gap-2">
-            <span className="grid place-items-center w-9 h-9 rounded-md" style={{ background: "var(--gradient-gold)" }}>
-              <Church className="w-5 h-5" style={{ color: "var(--ink)" }} />
+          <div className="flex items-center gap-3">
+            <img
+              src="/favicon.ico"
+              alt="Igreja Batista Evangelho e Missões"
+              className="h-10 w-10 rounded-full object-cover border border-white/15 shadow-sm"
+            />
+            <span className="max-w-[220px] font-display text-sm sm:text-base font-semibold leading-tight text-secondary">
+              Igreja Batista Evangelho e Missões
             </span>
-            <span className="font-display text-xl font-semibold text-secondary">IBEM</span>
           </div>
           <p className="mt-4 text-sm leading-relaxed max-w-xs">
             Igreja Batista Evangélica Missionária. Amamos a Deus, amamos as pessoas, cumprimos a missão.
@@ -373,7 +378,7 @@ function Footer() {
       </div>
       <div className="border-t border-white/10">
         <div className="container-page py-6 text-xs flex flex-wrap justify-between gap-2">
-          <span>© {new Date().getFullYear()} IBEM. Todos os direitos reservados.</span>
+          <span>© {new Date().getFullYear()} Igreja Batista Evangelho e Missões. Todos os direitos reservados.</span>
           <span>Feito com fé.</span>
         </div>
       </div>
