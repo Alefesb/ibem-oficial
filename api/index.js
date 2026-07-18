@@ -8,12 +8,9 @@ const distClientDir = path.join(rootDir, 'dist', 'client');
 
 async function serveStaticAsset(url) {
   const pathname = decodeURIComponent(url.pathname);
-  const relativePath = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
-  const filePath = path.join(distClientDir, relativePath);
+  const filePath = path.join(distClientDir, pathname === '/' ? 'index.html' : pathname.replace(/^\//, ''));
 
-  if (!filePath.startsWith(distClientDir)) {
-    return null;
-  }
+  if (!filePath.startsWith(distClientDir)) return null;
 
   try {
     const content = await readFile(filePath);
@@ -41,18 +38,24 @@ async function serveStaticAsset(url) {
 }
 
 export default async function handler(req) {
-  const staticResponse = await serveStaticAsset(new URL(req.url));
-  if (staticResponse) {
-    return staticResponse;
-  }
-
-  const { default: serverEntry } = await import('../dist/server/server.js');
   const url = new URL(req.url);
-  const request = new Request(`${url.origin}${url.pathname}${url.search}`, {
-    method: req.method,
-    headers: req.headers,
-    body: req.body ? Buffer.from(req.body, 'utf8') : undefined,
-  });
+  const asset = await serveStaticAsset(url);
+  if (asset) return asset;
 
-  return serverEntry.fetch(request, {}, {});
+  const html = `<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>IBEM</title>
+  </head>
+  <body>
+    <h1>IBEM</h1>
+    <p>O site está sendo servido.</p>
+  </body>
+</html>`;
+
+  return new Response(html, {
+    headers: { 'content-type': 'text/html; charset=utf-8' },
+  });
 }
