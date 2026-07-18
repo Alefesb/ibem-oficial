@@ -79,7 +79,7 @@ function Hero() {
       <img
         src={heroChurch}
         alt="Pessoas da igreja em um momento de fé"
-        className=" inset-50 w-full h-full object-cover scale-70 object-[50%_10%]"
+        className="absolute inset-50 w-full h-full object-cover scale-50 object-[50%_1%]"
         width={1920}
         height={1280}
       />
