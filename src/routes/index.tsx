@@ -122,7 +122,7 @@ function Hero() {
         className="absolute inset-0 hidden sm:block"
         style={{
           background:
-            "linear-gradient(110deg, oklch(0.14 0.05 260 / 0.85) 100%, oklch(0.16 0.04 260 / 0.45) 50%, oklch(0.16 0.03 260 / 0.2) 100%)",
+            "linear-gradient(110deg, oklch(0.14 0.05 260 / 0.85) 20%, oklch(0.16 0.04 260 / 0.45) 50%, oklch(0.16 0.03 260 / 0.2) 100%)",
         }}
       />
 
