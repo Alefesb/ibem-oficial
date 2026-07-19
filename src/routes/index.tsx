@@ -350,7 +350,7 @@ function Localizacao() {
             <ul className="mt-8 space-y-4 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 mt-0.5" style={{ color: "var(--gold)" }} />
-                <span>Rua da Fé, 123 — Centro<br />Sua Cidade, Estado — CEP 00000-000</span>
+                <span>R. Ana Mariani Bitencourt, 24 - São Caetano, Salvador - BA, 40390-570<br />Salvador, Bahia</span>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-5 h-5 mt-0.5" style={{ color: "var(--gold)" }} />
