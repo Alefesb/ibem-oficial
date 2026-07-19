@@ -87,11 +87,11 @@ function Hero() {
           inset-0
           w-full
           h-full
+
           object-cover
-          object-center
-          scale-100
+          object-[50%_10%]
+
           sm:inset-40
-          sm:h-
           sm:scale-40
           sm:object-[100%_1%]
         "
@@ -99,21 +99,11 @@ function Hero() {
         height={1280}
       />
 
-      {/* Mobile */}
+      {/* Overlay Mobile */}
       <div
         className="absolute inset-0 sm:hidden"
         style={{
-          background: `
-            linear-gradient(
-              to bottom,
-              transparent 0%,
-              transparent 45%,
-              rgba(8,12,24,0.20) 60%,
-              rgba(8,12,24,0.45) 75%,
-              rgba(8,12,24,0.70) 90%,
-              rgba(8,12,24,0.90) 100%
-            )
-          `,
+          background: "rgba(0, 0, 0, 0.7)",
         }}
       />
 
@@ -132,7 +122,8 @@ function Hero() {
         <div className="max-w-2xl text-secondary">
           <Reveal>
             <span className="eyebrow">
-              <span className="gold-rule" /> Bem-vindo à Igreja Batista Evangelho e Missões
+              <span className="gold-rule" />
+              {" "}Bem-vindo à Igreja Batista Evangelho e Missões
             </span>
           </Reveal>
 
