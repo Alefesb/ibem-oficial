@@ -89,11 +89,20 @@ function Hero() {
           h-full
 
           object-cover
-          object-[50%_10%]
+          object-[100%_10%]
 
-          sm:inset-40
-          sm:scale-40
+          sm:inset-60
+          sm:scale-50
           sm:object-[100%_1%]
+
+          md:object-cover
+          md:object-[100%_1%]
+          md:scale-50
+          md:translate-y-0
+          object-contain
+          object-center
+          scale-[1]
+          translate-y-7
         "
         width={1920}
         height={1280}
@@ -101,7 +110,7 @@ function Hero() {
 
       {/* Overlay Mobile */}
       <div
-        className="absolute inset-0 sm:hidden"
+        className="sm:scale-0 absolute inset-0 sm:hidden"
         style={{
           background: "rgba(0, 0, 0, 0.7)",
         }}
@@ -133,7 +142,7 @@ function Hero() {
               <br />
               <span
                 className="shimmer-text"
-                style={{ color: "var(--gold)" }}
+                style={{ color: "var()" }}
               >
                 uma família
               </span>{" "}
@@ -173,12 +182,7 @@ function Hero() {
         </div>
       </div>
 
-      <div
-        aria-hidden
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 w-6 h-10 rounded-full border border-gold/40 grid place-items-start p-1"
-      >
-        <span className="w-1 h-2 rounded-full bg-gold animate-bounce" />
-      </div>
+      
     </section>
   );
 }

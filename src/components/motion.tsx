@@ -154,24 +154,11 @@ export function Reveal({
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(true);
+  const [shown, setShown] = useState(false);
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduceMotion) {
-      setShown(true);
-      return;
-    }
-
-    if (typeof window.IntersectionObserver === "undefined") {
-      setShown(true);
-      return;
-    }
-
     const el = ref.current;
     if (!el) return;
-    const io = new window.IntersectionObserver(
+    const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
@@ -185,7 +172,6 @@ export function Reveal({
     io.observe(el);
     return () => io.disconnect();
   }, []);
-
   return (
     <div
       ref={ref}
@@ -238,15 +224,7 @@ export function FloatingOrbs() {
   }, []);
   return (
     <div ref={containerRef} aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      <div
-        data-depth="1.4"
-        className="absolute -top-24 -left-16 h-[420px] w-[420px] rounded-full will-change-transform"
-        style={{
-          background: "radial-gradient(circle, oklch(0.82 0.14 88 / 0.45), transparent 65%)",
-          filter: "blur(20px)",
-          animation: "float-slow 14s ease-in-out infinite",
-        }}
-      />
+      
       <div
         data-depth="0.8"
         className="absolute top-1/3 right-[-120px] h-[520px] w-[520px] rounded-full will-change-transform"
