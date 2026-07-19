@@ -112,7 +112,7 @@ function Hero() {
       <div
         className="sm:scale-0 absolute inset-0 sm:hidden"
         style={{
-          background: "rgba(0, 0, 0, 0.5)",
+          background: "rgba(0, 0, 0, 0.6)",
         }}
       />
 
