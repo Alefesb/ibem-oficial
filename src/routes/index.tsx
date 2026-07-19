@@ -75,49 +75,113 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="inicio" className="flex flex-row relative h-10 min-h-screen flex items-center pt-16 overflow-hidden">
+    <section
+      id="inicio"
+      className="relative min-h-screen flex items-center pt-16 overflow-hidden"
+    >
       <img
         src={heroChurch}
         alt="Pessoas da igreja em um momento de fé"
-        className=" absolute inset-30 w-full h-mid object-cover scale-50 object-[100%_1%]"
+        className="
+          absolute
+          inset-0
+          w-full
+          h-full
+          object-cover
+          object-center
+          scale-100
+          sm:inset-40
+          sm:h-
+          sm:scale-40
+          sm:object-[100%_1%]
+        "
         width={1920}
         height={1280}
       />
+
+      {/* Mobile */}
       <div
-        className="absolute inset-0"
+        className="absolute inset-0 sm:hidden"
         style={{
-          background: "linear-gradient(110deg, oklch(0.14 0.05 260 / 0.85) 20%, oklch(0.16 0.04 260 / 0.45) 50%, oklch(0.16 0.03 260 / 0.2) 100%)",
+          background: `
+            linear-gradient(
+              to bottom,
+              transparent 0%,
+              transparent 45%,
+              rgba(8,12,24,0.20) 60%,
+              rgba(8,12,24,0.45) 75%,
+              rgba(8,12,24,0.70) 90%,
+              rgba(8,12,24,0.90) 100%
+            )
+          `,
         }}
       />
+
+      {/* Overlay Desktop (original) */}
+      <div
+        className="absolute inset-0 hidden sm:block"
+        style={{
+          background:
+            "linear-gradient(110deg, oklch(0.14 0.05 260 / 0.85) 100%, oklch(0.16 0.04 260 / 0.45) 50%, oklch(0.16 0.03 260 / 0.2) 100%)",
+        }}
+      />
+
       <FloatingOrbs />
+
       <div className="container-page relative z-10 py-24">
         <div className="max-w-2xl text-secondary">
           <Reveal>
-            <span className="eyebrow"><span className="gold-rule" /> Bem-vindo à Igreja Batista Evangelho e Missões</span>
+            <span className="eyebrow">
+              <span className="gold-rule" /> Bem-vindo à Igreja Batista Evangelho e Missões
+            </span>
           </Reveal>
+
           <Reveal delay={120}>
-            <h1 className="mt-6 font-display text-5xl sm:text-6xl lg:text-7xl leading-[1.05] font-medium">
-              Uma casa de fé,<br />
-              <span className="shimmer-text" style={{ color: "var(--gold)" }}>uma família</span> em Cristo.
+            <h1 className="mt-6 font-display text-4xl sm:text-6xl lg:text-7xl leading-[1.05] font-medium">
+              Uma casa de fé,
+              <br />
+              <span
+                className="shimmer-text"
+                style={{ color: "var(--gold)" }}
+              >
+                uma família
+              </span>{" "}
+              em Cristo.
             </h1>
           </Reveal>
+
           <Reveal delay={240}>
-            <p className="mt-6 text-lg text-secondary/80 max-w-xl leading-relaxed">
-              Igreja Batista Evangelho Missões — comprometida com a Palavra, a oração e o cuidado uns com os outros. Venha nos visitar.
+            <p className="mt-6 text-base sm:text-lg text-secondary/80 max-w-xl leading-relaxed">
+              Igreja Batista Evangelho Missões — comprometida com a Palavra,
+              a oração e o cuidado uns com os outros. Venha nos visitar.
             </p>
           </Reveal>
+
           <Reveal delay={360}>
-            <div className="mt-10 flex flex-wrap gap-4">
+            <div className="mt-10 flex flex-col sm:flex-row gap-4">
               <Magnetic>
-                <a href="#cultos" className="btn-primary">Horários de culto <ArrowRight className="w-4 h-4" /></a>
+                <a
+                  href="#cultos"
+                  className="btn-primary w-full sm:w-auto justify-center"
+                >
+                  Horários de culto
+                  <ArrowRight className="w-4 h-4" />
+                </a>
               </Magnetic>
+
               <Magnetic>
-                <a href="#live" className="btn-outline-gold">Assistir ao vivo</a>
+                <a
+                  href="#live"
+                  className="btn-outline-gold w-full sm:w-auto justify-center"
+                >
+                  Assistir ao vivo
+                </a>
               </Magnetic>
             </div>
           </Reveal>
         </div>
       </div>
+
       <div
         aria-hidden
         className="absolute bottom-8 left-1/2 -translate-x-1/2 w-6 h-10 rounded-full border border-gold/40 grid place-items-start p-1"
